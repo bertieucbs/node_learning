@@ -1,0 +1,21 @@
+//
+   Created with JetBrains WebStorm.
+   User: nitineusebius
+   Date: 5/31/13
+   Time: 12:03 PM
+   To change this template use File | Settings | File Templates.
+extends ../layout
+block body
+
+ h1 New task view
+
+ form(method='post',action='/tasks')
+     fieldset
+         legend Add a task
+         div.clearfix
+             label Task
+             div.input
+                 input(name='task[task]', class='xlarge')
+         div.actions
+             input(type='submit',value='Save', class='btn primary')
+             button(type='reset',class='btn') Cancel

@@ -1,0 +1,19 @@
+//
+   Created with JetBrains WebStorm.
+   User: nitineusebius
+   Date: 5/31/13
+   Time: 2:20 PM
+   To change this template use File | Settings | File Templates.
+extends ../layout
+block body
+    form(method='post',action='/tasks/' + task.id)
+        input(name='_method',value='PUT',type= 'hidden')
+        fieldset
+            legend Editing the task
+            div.clearfix
+                label Task
+                div.input
+                    input(name='task[task]',class='xlarge',value="#{task.task}")
+            div.actions
+                input(type='submit',value='Save',class='btn primary')
+                button(type='reset',class='btn') Cancel
