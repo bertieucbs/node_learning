@@ -1,0 +1,24 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> Node real time demo</title>
+	</head>
+
+
+	<body>
+		<h1>Real time demo of user connecting...<h1>
+		<h2>How many users are there?</h2>
+		<p id = "count"></p>
+		<script src = "socket.io/socket.io.js"></script>
+		<script>
+			var socket  = io.connect('http://127.0.0.1:3000');
+			socket.on('message',function(data){
+				
+					var p = document.getElementById("count");
+					p.innerHTML = data.users;
+				
+				});
+		</script>
+	</body>
+<html>
