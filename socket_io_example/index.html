@@ -1,0 +1,48 @@
+<html>
+<head>
+		<title>Socket IO demo</title>
+		<script src = "/socket.io/socket.io.js"></script>
+		 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+		<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+		<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+		<link rel="stylesheet" href="/resources/demos/style.css" />
+</head>
+
+<body>
+
+
+	<script>
+			var socket = io.connect('http://localhost:3000');
+			socket.on('users',function(data){
+
+				var p = document.getElementById("users");
+				p.innerHTML = data.count;
+			});
+
+			socket.on('push_message',function(data){
+				//alert('push message');
+				$('form').append('<br/>Message : ' + data.message);	
+
+			});
+	</script>
+	<script>
+                        $(function() {
+                                $( "input[type=submit]" ).button().click(function( event ) {
+                                        event.preventDefault();
+                                        var message = document.getElementById("message");
+					socket.emit('message',{message : message.value})
+                                });
+                        });
+	</script>
+
+	<h1>Socket IO Node example</h1>
+	Total user connected to the server : 
+	<p id ="users"></p>
+	<form id="form" action="#">
+		<input type = "text" id ="message"/>
+		<input type="submit" value="Send message" />
+	</form>
+</body>
+
+
+</html>
