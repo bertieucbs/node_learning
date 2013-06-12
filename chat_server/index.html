@@ -2,16 +2,116 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Socket.IO Express Example</title>
+	<title>Socket IO chat server</title>
+		<script src = "/socket.io/socket.io.js"></script>
+		 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+		<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+		<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+		<link rel="stylesheet" href="/resources/demos/style.css" />
+
+	<style>
+		#send_message{
+			display : none;
+		}
+
+		
+		#messages{
+		
+			border : 1px solid;
+			float : left;
+			width : 400px;
+			height : 300px;
+			overflow : scroll;
+		}
+
+		#connected_users{
+			float : right;
+
+		}
+	</style>
   </head>
   <body>
-    <h1>Socket.IO Express Example</h1>
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
+    <h1>Welcome to Socket.IO enabled chat room!</h1>
+  <script>
+
       var socket = io.connect();
-      socket.on('welcome', function (data) {
-        console.log(data.text);
-      });
-    </script>
+      
+	socket.on('welcome', function (data) {
+        	console.log(data.text);
+      	});
+
+	socket.on('connected_users',function(data){
+		var html = '';
+		for(i = 0 ; i<data.users.length ; i++){
+			//alert(data.users[i]);
+			html = html + '<li>' + data.users[i] + '</li>';
+		}
+
+		$("#connected_users ul").empty().append(html);
+	});
+
+	socket.on('broadcast_messages',function(data){
+			
+			$("#messages").prepend('<b>' + data.user + '</b>' + ' : ' + data.message + '<br/>');
+			
+		});
+
+
+	$(function() {
+                      /* $( "input[type=submit]" ).button().click(function( event ) {
+                                        event.preventDefault();
+                                        var nickname = document.getElementById("nickname");
+					socket.emit('add_nickname',nickname.value);
+                                });*/
+			 $( "input[type=submit]" ).button();
+
+			$('#nickname_form').submit(function(event) {
+				 event.preventDefault();
+                                 var nickname = document.getElementById("nickname");
+                                 socket.emit('add_nickname',nickname.value,function(data){
+						
+						if(data){
+							$('#nickname_form').hide();
+							$('#send_message').show();
+						}else{
+							$('#nickname_form').prepend('<font color="red">The nickname is already present. Please try another one</font><br/>');
+						}
+					});
+                        });
+
+
+			$('#send_message').submit(function(event) {
+                                 event.preventDefault();
+                                 var message = document.getElementById("message");
+                                 socket.emit('send_message',message.value);
+                        });
+
+});
+</script>
+
+
+	<form id="nickname_form" action="#">
+
+                <label>Enter your nickname : </label>
+                <input type = "text" id ="nickname"/>
+                <input type="submit" value="Submit" />
+        </form>
+
+        <form id="send_message" action="#">
+
+                <label>Enter your nickname : </label>
+                <input type = "text" id ="message"/>
+                <input type="submit" value="Send Message" />
+        </form>
+
+	<div id = "messages"></div>
+
+	<div id = "connected_users">
+		<ul>
+		</ul>
+	<div>
+
+	
+
   </body>
 </html>
